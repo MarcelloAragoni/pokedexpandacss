@@ -28,6 +28,7 @@ function App() {
         gap: "16px",
         w: "100%",
         minH: "100vh",
+        padding: "16px",
       })}
     >
       {!search && (

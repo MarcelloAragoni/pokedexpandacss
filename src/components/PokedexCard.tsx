@@ -1,6 +1,26 @@
 import { css } from "../../styled-system/css";
 import Badge from "./badge/badge";
-import { useTypeColor } from "../hooks/useTypeColor";
+import { PokedexButton } from "./pokedexButton";
+
+type PokemonType =
+  | "normal"
+  | "fire"
+  | "water"
+  | "electric"
+  | "grass"
+  | "ice"
+  | "fighting"
+  | "poison"
+  | "ground"
+  | "flying"
+  | "psychic"
+  | "bug"
+  | "rock"
+  | "ghost"
+  | "dragon"
+  | "dark"
+  | "steel"
+  | "fairy";
 
 type PokedexCardProps = {
   id: number;
@@ -11,31 +31,14 @@ type PokedexCardProps = {
 };
 
 export default function PokedexCard({
-  id,
   name,
   image,
   types,
   onClick,
 }: PokedexCardProps) {
-  const headerColor = useTypeColor(types[0]);
+  console.log(types[0]);
   return (
-    <button
-      onClick={onClick}
-      className={css({
-        textAlign: "left",
-        bg: "white",
-        border: "1px solid",
-        borderColor: "gray.200",
-        borderRadius: "8px",
-        padding: "8px",
-        display: "flex",
-        flexDirection: "column",
-        gap: "6px",
-        cursor: "pointer",
-        _hover: { boxShadow: "sm" },
-      })}
-    >
-      <div className={css({ fontSize: "sm", color: "gray.700" })}>#{id}</div>
+    <PokedexButton bgColor={types[0] as PokemonType} onClick={onClick}>
       <div
         className={css({
           borderRadius: "6px",
@@ -44,7 +47,6 @@ export default function PokedexCard({
           justifyContent: "center",
           minH: "96px",
         })}
-        style={{ backgroundColor: headerColor }}
       >
         {image ? (
           <img src={image} alt={name} className={css({ maxH: "96px" })} />
@@ -64,6 +66,6 @@ export default function PokedexCard({
           </Badge>
         ))}
       </div>
-    </button>
+    </PokedexButton>
   );
 }

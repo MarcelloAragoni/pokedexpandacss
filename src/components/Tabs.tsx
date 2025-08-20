@@ -12,9 +12,21 @@ export function Tabs({
   const [active, setActive] = useState(initial);
   return (
     <div
-      className={css({ display: "flex", flexDirection: "column", gap: "4px" })}
+      className={css({
+        display: "flex",
+        flexDirection: "column",
+        gap: "4px",
+        width: "100%",
+      })}
     >
-      <div className={css({ display: "flex", gap: "4px" })}>
+      <div
+        className={css({
+          display: "flex",
+          gap: "4px",
+          width: "100%",
+          justifyContent: "space-between",
+        })}
+      >
         {tabs.map((t, i) => (
           <span
             key={t.label}
@@ -25,13 +37,16 @@ export function Tabs({
               fontWeight: active === i ? "bold" : "normal",
               bg: "transparent",
               color: "black",
+              flex: "1",
+              textAlign: "center",
+              cursor: "pointer",
             })}
           >
             {t.label}
           </span>
         ))}
       </div>
-      <div>{tabs[active]?.content}</div>
+      <div className={css({ width: "100%" })}>{tabs[active]?.content}</div>
     </div>
   );
 }

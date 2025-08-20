@@ -163,6 +163,7 @@ export default function PokemonDetailCard({
           padding: "16px",
           boxShadow: "md",
           flex: "1",
+          width: "100%",
           overflowY: "auto",
           zIndex: "99",
         })}
