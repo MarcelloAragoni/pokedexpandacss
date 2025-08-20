@@ -1,16 +1,23 @@
 import { css } from "../styled-system/css";
-import Badge from "./components/badge/badge";
-import { useState } from "react";
-import { usePokemonDetails } from "./hooks/usePokemon";
+import PokedexCard from "./components/PokedexCard";
+import PokemonDetailCard from "./components/PokemonDetailCard";
+import { useState, useMemo } from "react";
+import { usePokemonDetails, useGenerationPokemons } from "./hooks/usePokemon";
+import { getPokemon } from "./api/pokeapi";
 
 function App() {
   const [query, setQuery] = useState("");
   const [search, setSearch] = useState<string | null>(null);
+  const [generationId, setGenerationId] = useState<number>(1);
+  // shiny agora é controlado dentro do PokemonDetailCard
 
   const { data, isLoading, isError } = usePokemonDetails(
     search ?? "",
     !!search
   );
+
+  const genQuery = useGenerationPokemons(generationId, !search);
+  const speciesList = genQuery.data ?? [];
 
   return (
     <div
@@ -19,126 +26,162 @@ function App() {
         display: "flex",
         flexDirection: "column",
         gap: "16px",
-        padding: "16px",
-        maxW: "720px",
+        w: "100%",
+        minH: "100vh",
       })}
     >
-      <form
-        onSubmit={(e) => {
-          e.preventDefault();
-          const q = query.trim().toLowerCase();
-          setSearch(q || null);
-        }}
-        className={css({ display: "flex", gap: "8px" })}
-      >
-        <input
-          value={query}
-          onChange={(e) => setQuery(e.target.value)}
-          placeholder="Busque por nome ou ID (ex: pikachu ou 25)"
-          className={css({
-            border: "1px solid",
-            borderColor: "gray.300",
-            borderRadius: "6px",
-            padding: "8px",
-            flex: "1",
-            bg: "white",
-            color: "black",
-          })}
-        />
-        <button
-          type="submit"
-          className={css({
-            bg: "typeElectric",
-            color: "white",
-            borderRadius: "6px",
-            paddingX: "12px",
-            paddingY: "8px",
-            fontWeight: "bold",
-          })}
+      {!search && (
+        <form
+          onSubmit={(e) => {
+            e.preventDefault();
+            const q = query.trim().toLowerCase();
+            setSearch(q || null);
+          }}
+          className={css({ display: "flex", gap: "8px" })}
         >
-          Buscar
-        </button>
-      </form>
+          <input
+            value={query}
+            onChange={(e) => setQuery(e.target.value)}
+            placeholder="Busque por nome ou ID (ex: pikachu ou 25)"
+            className={css({
+              border: "1px solid",
+              borderColor: "gray.300",
+              borderRadius: "6px",
+              padding: "8px",
+              flex: "1",
+              bg: "white",
+              color: "black",
+            })}
+          />
+          <button
+            type="submit"
+            className={css({
+              bg: "typeElectric",
+              color: "white",
+              borderRadius: "6px",
+              paddingX: "12px",
+              paddingY: "8px",
+              fontWeight: "bold",
+            })}
+          >
+            Buscar
+          </button>
+        </form>
+      )}
 
       {!search && (
-        <div className={css({ fontWeight: "bold" })}>
-          Digite um nome ou ID para buscar.
+        <div
+          className={css({ display: "flex", gap: "8px", alignItems: "center" })}
+        >
+          <label className={css({ fontWeight: "bold" })}>Geração:</label>
+          <select
+            value={generationId}
+            onChange={(e) => setGenerationId(Number(e.target.value))}
+            className={css({
+              border: "1px solid",
+              borderColor: "gray.300",
+              borderRadius: "6px",
+              padding: "6px",
+              bg: "white",
+              color: "black",
+            })}
+          >
+            <option value={1}>I</option>
+            <option value={2}>II</option>
+            <option value={3}>III</option>
+            <option value={4}>IV</option>
+            <option value={5}>V</option>
+            <option value={6}>VI</option>
+            <option value={7}>VII</option>
+            <option value={8}>VIII</option>
+            <option value={9}>IX</option>
+          </select>
         </div>
       )}
-      {isLoading && <div>Carregando...</div>}
-      {isError && search && <div>Não encontrado ou erro na busca.</div>}
 
-      {data && (
+      {!search && genQuery.isLoading && <div>Carregando geração...</div>}
+      {!search && !genQuery.isLoading && speciesList.length > 0 && (
         <div
           className={css({
             display: "grid",
-            gridTemplateColumns: "160px 1fr",
-            gap: "16px",
-            alignItems: "start",
+            gridTemplateColumns: "repeat(auto-fill, minmax(160px, 1fr))",
+            gap: "12px",
           })}
         >
-          <div
-            className={css({
-              bg: "gray.100",
-              borderRadius: "8px",
-              display: "flex",
-              alignItems: "center",
-              justifyContent: "center",
-              minH: "160px",
-            })}
-          >
-            {data.image ? (
-              <img
-                src={data.image}
-                alt={data.pokemon.name}
-                className={css({ maxH: "160px" })}
+          {speciesList.map((s) => {
+            const id = Number(s.url.split("/").filter(Boolean).pop());
+            return (
+              <PokedexCardLoader
+                key={s.name}
+                id={id}
+                name={s.name}
+                onOpen={(n) => setSearch(String(n))}
               />
-            ) : (
-              <span>Sem imagem</span>
-            )}
-          </div>
-
-          <div
-            className={css({
-              display: "flex",
-              flexDirection: "column",
-              gap: "8px",
-            })}
-          >
-            <div
-              className={css({
-                fontSize: "2xl",
-                fontWeight: "bold",
-                textTransform: "capitalize",
-              })}
-            >
-              #{data.pokemon.id} {data.pokemon.name}
-            </div>
-
-            <div
-              className={css({ display: "flex", gap: "8px", flexWrap: "wrap" })}
-            >
-              {data.pokemon.types.map((t) => (
-                <Badge key={t.type.name} bgColor={t.type.name as any}>
-                  {t.type.name}
-                </Badge>
-              ))}
-            </div>
-
-            <div
-              className={css({
-                fontSize: "sm",
-                color: "gray.700",
-                whiteSpace: "pre-wrap",
-              })}
-            >
-              {data.pokedexEntry || "Sem entrada da Pokédex disponível."}
-            </div>
-          </div>
+            );
+          })}
         </div>
+      )}
+
+      {isLoading && search && <div>Carregando...</div>}
+      {isError && search && <div>Não encontrado ou erro na busca.</div>}
+
+      {data && (
+        <PokemonDetailCard
+          pokemon={data.pokemon}
+          image={data.image}
+          pokedexEntry={data.pokedexEntry}
+          species={data.species}
+          evolutionChain={data.evolutionChain}
+          onBack={() => setSearch(null)}
+        />
       )}
     </div>
   );
 }
 
 export default App;
+
+function PokedexCardLoader({
+  id,
+  name,
+  onOpen,
+}: {
+  id: number;
+  name: string;
+  onOpen: (id: number) => void;
+}) {
+  const [details, setDetails] = useState<{
+    image: string | null;
+    types: string[];
+  } | null>(null);
+  const [, setLoading] = useState(false);
+
+  useMemo(() => {
+    let isMounted = true;
+    setLoading(true);
+    getPokemon(id)
+      .then((p) => {
+        if (!isMounted) return;
+        const image =
+          p.sprites?.other?.["official-artwork"]?.front_default ??
+          p.sprites?.front_default ??
+          null;
+        const types = p.types.map((t) => t.type.name);
+        setDetails({ image, types });
+      })
+      .finally(() => isMounted && setLoading(false));
+    return () => {
+      isMounted = false;
+    };
+  }, [id]);
+
+  return (
+    <PokedexCard
+      id={id}
+      name={name}
+      image={details?.image ?? null}
+      types={details?.types ?? []}
+      onClick={() => onOpen(id)}
+    />
+  );
+}

@@ -13,9 +13,9 @@
     "allowImportingTsExtensions": true,
     "verbatimModuleSyntax": true,
     "moduleDetection": "force",
-    "noEmit": false,
+    "noEmit": true,
     "jsx": "react-jsx",
-    "emitDeclarationOnly": true,
+    "emitDeclarationOnly": false,
 
     /* Linting */
     "strict": true,
@@ -23,7 +23,7 @@
     "noUnusedParameters": true,
     "erasableSyntaxOnly": true,
     "noFallthroughCasesInSwitch": true,
-    "noUncheckedSideEffectImports": true
+    "noUncheckedSideEffectImports": false
   },
   "include": ["src"]
 }

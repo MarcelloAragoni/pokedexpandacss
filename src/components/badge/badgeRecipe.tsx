@@ -12,6 +12,7 @@ export const badgeRecipe = cva({
   },
   variants: {
     color: {
+      primary: { bg: "primary" },
       normal: { bg: "typeNormal" },
       fire: { bg: "typeFire" },
       water: { bg: "typeWater" },

@@ -15,7 +15,7 @@ export default defineConfig({
     extend: {
       tokens: {
         colors: {
-          primary: { value: "#C22E20" },
+          primary: { value: "#C03E20" },
           secondary: { value: "#000000" },
           text: {
             value: "#FFFFFF",
@@ -93,6 +93,42 @@ export default defineConfig({
             value: "#D685AD",
             description: "Cor para badges dos pokemons de tipo fada",
           },
+
+          bug: { value: "#8BD674" },
+
+          dark: { value: "#6F6E78" },
+
+          dragon: { value: "#7383B9" },
+
+          electric: { value: "#ffd86f" },
+
+          fairy: { value: "#EBA8C3" },
+
+          fighting: { value: "#EB4971" },
+
+          fire: { value: "#fb6c6c" },
+
+          flying: { value: "#83A2E3" },
+
+          ghost: { value: "#8571BE" },
+
+          grass: { value: "#48d0b0" },
+
+          ground: { value: "#F78551" },
+
+          ice: { value: "#91D8DF" },
+
+          normal: { value: "#B5B9C4" },
+
+          poison: { value: "#9F6E97" },
+
+          psychic: { value: "#FF6568" },
+
+          rock: { value: "#D4C294" },
+
+          steel: { value: "#4C91B2" },
+
+          water: { value: "#76bdfe" },
         },
         fonts: {
           body: { value: "sans-serif" },

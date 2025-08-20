@@ -1,5 +1,6 @@
 export type BadgeProps = {
   bgColor:
+    | "primary"
     | "normal"
     | "fire"
     | "water"
