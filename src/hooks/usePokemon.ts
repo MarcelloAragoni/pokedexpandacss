@@ -1,10 +1,5 @@
 import { useQuery } from "@tanstack/react-query";
-import {
-  getPokemon,
-  getSpecies,
-  type Pokemon,
-  type Species,
-} from "../api/pokeapi";
+import { getPokemon, getSpecies, type Pokemon } from "../api/pokeapi";
 
 type PokemonDetails = {
   pokemon: Pokemon;
