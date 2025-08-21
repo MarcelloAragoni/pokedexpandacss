@@ -1,5 +1,6 @@
 account_id = "0ac77fc7a62c5273b87eac9c74b8a7d9"
 compatibility_date = "2024-08-01"
+pages_build_output_dir = "dist"
 
 # Se usar rotas (opcional)
 # routes = [
