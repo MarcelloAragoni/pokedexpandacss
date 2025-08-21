@@ -1,0 +1,29 @@
+name: Deploy Pages (legacy - disabled)
+
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  deployments: write
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+
+      - name: Install deps
+        run: npm ci
+
+      - name: Build
+        run: npm run build # deve gerar 'dist/'
+
+      - name: Skip (legacy disabled)
+        run: echo "This workflow is disabled. Use deploy-pages.yml"
