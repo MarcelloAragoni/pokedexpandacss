@@ -182,6 +182,7 @@ export default function PokemonDetailCard({
                       display: "grid",
                       gridTemplateColumns: "120px 1fr",
                       gap: "6px",
+                      color: "black",
                     })}
                   >
                     <div>Espécie</div>
